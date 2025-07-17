@@ -3,7 +3,7 @@
 This sample demonstrates the full capabilities of the Syncfusion [React TreeGrid](https://www.syncfusion.com/react-components/react-tree-grid) by integrating all available APIs into a single, interactive experience. Users can dynamically enable or disable features such as CRUD operations, template customizations, resource color customizations, editing, and exporting—directly through the UI—without writing a single line of code. This makes it an ideal tool for presales evaluations, customer demos, and internal testing, allowing users to explore and understand the treegrid’s flexibility and power in real time.
  
 <p align="center">
-<img src="src/assets/images/react-scheduler-preview.jpg" alt="React Schedule Preview"/>
+<img src="src/assets/images/react-treegrid-preview.jpg" alt="React TreeGrid Preview"/>
 </p>
  
 ## Project prerequisites
