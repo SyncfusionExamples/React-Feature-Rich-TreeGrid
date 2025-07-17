@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "target": "es5",
+        "jsx": "react"
+    },
+    "include": [
+        "src"
+    ],
+    "files": [
+        "src/index.d.ts"
+    ]
+}
