@@ -4,6 +4,11 @@
   "description": "Essential JS 2 - Sample name",
   "author": "Syncfusion Inc.",
   "license": "SEE LICENSE IN license",
+  "scripts": {
+    "start": "webpack-dev-server --open --mode development",
+    "build": "webpack --mode production",
+    "ci-publish": "gulp publish-sample"
+  },
   "devDependencies": {
     "@types/node": "^20.4.1",
     "@types/react": "^18.2.14",
