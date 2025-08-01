@@ -5,9 +5,9 @@ import { parentsUntil, ValueType, FilterBarMode, CheckboxSelectionType, Selectio
 import { TreeGridComponent, FilterType, LoadingIndicatorModel, AggregateTemplateContext, RowPosition, AggregatesDirective, AggregateDirective, AggregateColumnsDirective, AggregateColumnDirective, ColumnModel, FilterHierarchyMode, SelectionSettingsModel, ContextMenuItem, ToolbarItems, FilterSettingsModel, EditMode, TreeGridColumn, RowDD, Aggregate, Resize, Toolbar, ColumnChooser, CommandColumn, Edit, ContextMenu, ColumnMenu, VirtualScroll, Page, PdfExport, ExcelExport, Freeze, ColumnsDirective, ColumnDirective, Filter, Sort, Reorder, Inject, ITreeData } from '@syncfusion/ej2-react-treegrid';
 import { projectDetails } from './datasource';
 import { ButtonComponent, CheckBoxComponent, ChipListComponent, ChipsDirective, ChipDirective } from '@syncfusion/ej2-react-buttons';
-import { MenuComponent, SidebarComponent } from '@syncfusion/ej2-react-navigations';
+import { AppBarComponent, MenuComponent, SidebarComponent } from '@syncfusion/ej2-react-navigations';
 import { AutoComplete, FieldSettingsModel  } from '@syncfusion/ej2-react-dropdowns';
-import { isNullOrUndefined, DateFormatOptions, createElement, setCulture } from '@syncfusion/ej2-base';
+import { isNullOrUndefined, DateFormatOptions, createElement, closest } from '@syncfusion/ej2-base';
 import { TooltipComponent, BeforeOpenEventArgs, DialogComponent } from '@syncfusion/ej2-react-popups';
 import { DatePicker } from '@syncfusion/ej2-react-calendars';
 import { ListViewComponent, Virtualization } from '@syncfusion/ej2-react-lists';
@@ -85,6 +85,109 @@ export const App = () => {
   const taskIDRules = { required: true };
   const taskNameRules = { required: true };
   const costRules = { required: true, number: true };
+  let menuRef!: MenuComponent;
+  let menuMobileRef!: MenuComponent;
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  let isResized: boolean = false;
+  let isDesktop: boolean = true;
+  let isMenuDesktopOpened: boolean = false;
+  let isMenuMobileOpened: boolean = false;
+  let menuAppBarFields = { text: ['category', 'value'], children: ['options'] };
+  useEffect(() => {
+    const handleWindowResize = () => {
+      isResized = true;
+      if (isResized && (isMenuDesktopOpened || isMenuMobileOpened)) {
+        isResized = false;
+        menuRef?.close();
+        menuMobileRef?.close();
+      }
+    };
+    window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  });
+  const menuItems = [
+    {
+      category: 'LEARNING',
+      options: [
+        {
+          icon: 'platform-image sf-icon-demos',
+          link: 'https://ej2.syncfusion.com/react/demos/#/tailwind3/treegrid/treegrid-overview',
+          title: 'Demos',
+          about: {
+            value: 'Explore our exciting product demos.',
+          },
+        },
+        {
+          icon: 'platform-image sf-icon-documentation',
+          link: 'https://ej2.syncfusion.com/react/documentation/treegrid/getting-started',
+          title: 'Documentation',
+          about: {
+            value: 'Comprehensive guides for every product.',
+          },
+        },
+        {
+          icon: 'platform-image sf-icon-blog',
+          link: 'https://www.syncfusion.com/blogs/category/react',
+          title: 'Blog',
+          about: {
+            value: 'Discover new ideas and perspectives.',
+          },
+        },
+        {
+          icon: 'platform-image sf-icon-tutorial-videos',
+          link: 'https://www.syncfusion.com/tutorial-videos/react/tree-grid',
+          title: 'Tutorial Videos',
+          about: {
+            value: 'Sharpen your skills with our tutorial videos.',
+          },
+        },
+        {
+          icon: 'platform-image sf-icon-video-guide',
+          link: 'https://www.syncfusion.com/self-service-demo/react/',
+          title: 'Video Guides',
+          about: {
+            value: 'Explore key features in minutes with our quick video guides.',
+          },
+          isNew: true,
+        },
+        {
+          icon: 'platform-image sf-icon-showcase-app',
+          link: 'https://www.syncfusion.com/showcase-apps/react',
+          title: 'Showcase Apps',
+          about: {
+            value: 'Real-time apps built using our UI components.',
+          },
+          isNew: true,
+        }
+      ],
+    },
+  ];
+  const menuTemplate = (data: any) => {
+    return (
+      <a
+        href={data.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="menu-item"
+        data-title={data.title}
+      >
+        {data.category && (
+          <div className="menu-title">{data.category}</div>
+        )}
+        <div className="menusubitems">
+          <div className="icon-spacing">
+            <span className={data.icon} />
+          </div>
+          <span className="menu-item-title">{data.title}</span>
+          {data.isNew && <span className="e-badge">NEW</span>}
+        </div>
+        <div className="description">{data.about?.value}</div>
+      </a>
+    );
+  };
+
 
   const steps = [
     {
@@ -94,7 +197,7 @@ export const App = () => {
         (
           <div>
             <strong>TreeGrid Customizer Hub</strong> <br /> <br />
-	            Tap this icon to access the complete Treegrid control panel. Browse through categorized properties, make instant changes, and see them applied immediately. No coding required – just click, configure, and transform your Treegrid on the fly!
+	            Click to open TreeGrid settings. Instantly adjust layout, columns, filtering, and editing options—no coding needed.
           </div>
         )
     },
@@ -104,7 +207,7 @@ export const App = () => {
       content: (
         <div>
           <strong>Rapid & Customizable Search</strong><br /><br />
-          Quickly find what you need with the toolbar search box. Customize search behavior with options like case sensitivity and accent handling. Enjoy fast, accurate, and intuitive data filtering—right from the toolbar.
+          Use the toolbar search to quickly find records. Enable case sensitivity or accent handling for accurate results.
         </div>
       )
     },
@@ -115,7 +218,7 @@ export const App = () => {
         (
           <div>
             <strong>Smart Column Editor </strong><br /><br />
-            Tap this icon to customize your columns with ease. Access a menu of column-specific settings, adjust properties instantly, and see your changes reflected in real time. Explore all column customization options—no code needed, just click and configure!
+            Click to open column settings. Modify visibility, width, and formatting with real-time updates.
           </div>
         ),
     },
@@ -125,19 +228,9 @@ export const App = () => {
       content: (
         <div>
           <strong>Action Quickbar</strong><br /> <br/>
-          Enhance your Treegrid with powerful toolbar actions. Add custom toolbar items alongside built-in options to trigger Treegrid methods externally. This enables you to perform key actions—like clear filtering, selection, expand and collapse, edit, or export—using buttons outside the Treegrid for greater flexibility and control.
+          Add custom toolbar buttons to trigger actions like clear filters, expand rows, or export data—outside the TreeGrid.
         </div>
       ),
-    },
-    {
-      selector: '#treegridDisplayDetails',
-      arrowPosition: 'top-right',
-      content: (
-        <div>
-          <strong>Real-Time TreeGrid Metrics</strong><br /><br />
-          Get instant feedback on how each Treegrid action impacts performance. All data modifications are recorded, helping you review exactly what changes were made—perfect for audits, testing, or fine-tuning your app.
-        </div>
-      )
     },
     {
       selector: '#aggregate-menu',
@@ -145,7 +238,7 @@ export const App = () => {
       content: (
         <div>
          <strong>Concise Data Aggregation </strong><br /> <br />
-	         View all aggregate types in one place. Easily switch between different aggregation options and see the results instantly in the Treegrid’s footer. This flexible setup gives you quick, actionable insights at a glance.
+	         View and switch between priority types (Low, Medium, High) in the footer.
         </div>
       ),
     }
@@ -2266,25 +2359,132 @@ export const App = () => {
 
   return (
     <div id="overalContainer" onClick={(e: any) => { removeWalkthrough(e) }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start", // Align to top of first row
-          flexWrap: "wrap",
-          gap: "16px",
-        }}
-      >
-        {/* TRY IT FREE button */}
-        <div style={{ flexShrink: 0, marginTop: '3px' }}>
-          <a
-            id="download-now-button"
-            href="https://www.syncfusion.com/downloads/react?tag=es-livesample-react-featurerich-treegrid"
-            className="btn btn-free bold free-trial-gtag-sep15"
+      <div className="App">
+        <AppBarComponent colorMode="Dark" cssClass="appbar">
+          <div className="syncfusion-logo">
+            <a className="sync-logo-img" title="Syncfusion" aria-label="Syncfusion logo" href="https://www.syncfusion.com/">
+            </a>
+          </div>
+          <div className="e-appbar-separator"></div>
+          <div>
+            <span className="title">Feature Rich React Tree Grid</span>
+          </div>
+
+          {isDesktop && (
+            <>
+              <div id="github" className="desktop-only">
+                <span className="githubdemo"> <span> <i className="fab fa-github"></i> </span>
+                  <a href="https://github.com/SyncfusionExamples/React-Feature-Rich-TreeGrid" target="_blank" rel="noopener noreferrer"
+                    style={{ textDecoration: 'none', color: 'white', fontSize: '15px' }}>GitHub</a></span>
+              </div>
+
+              <div id="menu" className="desktop-only">
+                <MenuComponent id="listmenu" ref={(list: any) => menuRef = list}
+                  items={menuItems}
+                  showItemOnClick={true}
+                  fields={menuAppBarFields}
+                  template={menuTemplate}
+                  cssClass="e-template-menu"
+                  onOpen={() => {
+                      isMenuDesktopOpened = true;
+                  }}
+                ></MenuComponent>
+              </div>
+              <div id="demo" className="desktop-only">
+                <a
+                  id="book-free-demo" target="_blank"
+                  href="https://www.syncfusion.com/request-demo"
+                >
+                  <span className="bookdemo">BOOK A FREE DEMO</span>
+                </a>
+              </div>
+              <div id="tryfreebutton" className="desktop-only">
+                <a
+                  id="download-now-button" target="_blank"
+                  href="https://www.syncfusion.com/downloads/react?tag=es-livesample-react-featurerich-treegrid"
+                  className="menu-item btn btn--primary"
+                >
+                  <span className="tryfree">TRY IT FREE</span>
+                </a>
+              </div>
+            </>
+          )}
+
+          {/* Hamburger icon for mobile */}
+          <div className="hamburger mobile-only"
+            onClick={() => {
+              setMobileMenuOpen(!mobileMenuOpen)
+            }
+            }
           >
-            <span className="btn__text">TRY IT FREE</span>
-          </a>
+            ☰
+          </div>
+
+        </AppBarComponent >
+
+        {/* Popup menu for mobile */}
+
+        { mobileMenuOpen && (<div className="popup-menu mobile-only">
+
+          <div id="github" className="mobile-only" style={{ display: 'flex', alignItems: 'center' }}>
+            <span className="githubdemo" style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={{ padding: '2px', color: 'white' }}>
+                <i className="fab fa-github"></i>
+              </span>
+              <a
+                href="https://github.com/SyncfusionExamples/React-Feature-Rich-Grid"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none', color: 'white', fontSize: '15px', marginLeft: '5px' }}>GitHub</a></span>
+          </div> <hr className="separator-line-mobile" />
+          <div id="menumobile" className="mobile-only">
+            <MenuComponent id="listmenu" ref={(list: any) => menuMobileRef = list}
+              items={menuItems}
+              showItemOnClick={true}
+              enableScrolling={true}
+              fields={menuAppBarFields}
+              template={menuTemplate}
+              cssClass="e-template-menu"
+              onOpen={() => {
+                isMenuMobileOpened = true;
+              }}
+              beforeOpen={(e) => {
+                if (e.parentItem.category === 'LEARNING') {
+                  (closest(e.element, '.e-menu-wrapper') as HTMLElement).style.height = '250px';
+                }
+                const menuWrapper = document.getElementById("menumobile");
+                if (menuWrapper) {
+                  (menuWrapper as HTMLElement).style.setProperty('height', '300px', 'important');
+                }
+              }}
+              beforeClose={(e) => {
+                const menuWrapper = document.getElementById("menumobile");
+                if (menuWrapper) {
+                  (menuWrapper as HTMLElement).style.setProperty('height', '');
+                }
+              }}
+            ></MenuComponent>
+          </div>
+          <hr className="separator-line-mobile" />
+          <div id="demo" className="mobile-only">
+            <a
+              id="book-free-demo" target="_blank"
+              href="https://www.syncfusion.com/request-demo"
+            >
+              <span className="bookdemo">BOOK A FREE DEMO</span>
+            </a>
+          </div> <hr className="separator-line-mobile" />
+          <div className="mobile-only">
+            <a
+              id="download-now-button" target="_blank"
+              href="https://www.syncfusion.com/downloads/react?tag=es-livesample-react-featurerich-treegrid"
+              className="btn btn-free bold free-trial-gtag-sep15"
+            >
+              <span className="tryfree">TRY IT FREE</span>
+            </a>
+          </div>
         </div>
+        )}
       </div>
       <div className='parent-TreeGrid-Container'>
         {initialTreeGridRender}

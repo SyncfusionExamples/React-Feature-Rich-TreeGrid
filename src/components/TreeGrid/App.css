@@ -326,9 +326,11 @@ hr.separator-line {
 }
 
 .parent-TreeGrid-Container {
-    height: 92vh;
-    border: 1px solid #c4c7c5;
-    margin-top: 35px;
+  height: calc(96vh - 50px);
+  border: 1px solid #c4c7c5;
+  margin-top: 1px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .e-bigger .sidebar-treeview .table-content {
@@ -542,11 +544,6 @@ hr.separator-line {
   .e-treegrid .e-rowcell:nth-child(3) {
     display: none;
   }
-}
-
-.e-treegrid {
-  overflow-x: auto;
-  white-space: nowrap;
 }
 
 .search-input {
@@ -921,9 +918,10 @@ tfoot .e-indentcell {
   font-weight: bold;
 }
 
-[class^="sf-icon-"],
-[class*=" sf-icon-"] {
-    font-family: 'Showcase Material3' !important;
+.sf-icon-estimated-cost,
+.sf-icon-arrow-upwards,
+.sf-icon-arrow-downwards {
+  font-family: 'Showcase Material3' !important;
     speak: none;
     font-size: 16px !important;
     font-style: normal;
@@ -933,6 +931,16 @@ tfoot .e-indentcell {
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.platform-image.sf-icon-demos,
+.platform-image.sf-icon-documentation,
+.platform-image.sf-icon-blog,
+.platform-image.sf-icon-tutorial-videos,
+.platform-image.sf-icon-video-guide,
+.platform-image.sf-icon-showcase-app {
+  font-family: 'SyncfusionMenuIcons' !important;
+  font-size: 24px !important;
 }
 
 .icon-up {
@@ -1102,19 +1110,6 @@ body.fluent {
 .material3 .labelDetails,
 .fluent .labelDetails {
   color: black;
-}
-
-#download-now-button {
-  position: absolute;
-  border: 2px solid #0073dc;
-  background-color: #0073dc;
-  color: #fff;
-  right: 10px;
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: .5px;
-  vertical-align: top;
-  opacity: 1 !important;
 }
 
 #gridLines {
@@ -1376,4 +1371,403 @@ th[aria-colindex="5"] .e-filtermenudiv {
 
 .checkbox-group > .treeviewdiv .e-checkbox-wrapper {
   padding: 8px 0px 8px 0px !important;
+}
+
+	/* The checkbox values within the dropdown for the payment status are not properly aligned.*/
+.e-ddt.e-popup .e-selectall-parent,
+.e-treeview .e-ul {
+  padding: 0px 9px 0px 0px !important;
+}
+/* When the browser is in responsive mode, all banner text is grouped into a popup menu for better mobile usability */
+.popup-menu {
+  top: 60px;
+  right: 5px;
+  background-color: #111;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+}
+/* When the browser switches to responsive mode, all banner text is moved into a popup menu, with hyperlink tags styled for optimal appearance and interaction on smaller screens */
+.popup-menu a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin: 5px 0;
+}
+.githubdemo {
+  margin-top: 2px !important;
+}
+.mobile-only .githubdemo a {
+  margin-left: -5px !important;
+}
+/* Customization applied to the app bar for layout and styling */
+.appbar {
+  height: 60px;
+}
+/* Styling and customization for the div element containing the Syncfusion logo */
+.syncfusion-logo {
+  float: left;
+  width: 170px !important;
+  padding: 11px 0;
+}
+/* Image is rendered as a hyperlink with custom styling applied */
+.sync-logo-img {
+  background-repeat: no-repeat;
+  background-image: url(https://cdn.syncfusion.com/content/images/Logo/Logo_150dpi.png);
+  background-size: 160px 36px;
+  position: absolute;
+  width: 160px !important;
+  height: 36px;
+}
+/* Customization of the separator height for visual spacing */
+.e-appbar-separator {
+  height: 33px !important;
+}
+/* Customization of the title name for the React Feature Rich Data Grid */
+.title {
+  font-size: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 10px 15px !important;
+}
+/* Font family and color customization for the title, menu text, and "Try Free" label in the React Feature-Rich Data Grid component */
+.menu-title,
+.title,
+.tryfree,
+#github,
+#download-now-button {
+  font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+  color: #fff;
+  font-variant-ligatures: common-ligatures;
+}
+/* Font size and weight customization for the "Try Free" label and the "Book Free Demo" button text */
+.tryfree,
+.bookdemo {
+  font-size: 12px;
+  font-weight: 700;
+}
+/* Opacity and letter-spacing customization for the "Try Free" label */
+.tryfree {
+  letter-spacing: .5px;
+  opacity: 1 !important;
+}
+/* Styling and customization applied to the "Learning" text used as a menu title */
+.menu-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+/* Customization of the "GitHub" text label */
+#github {
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: auto;
+  padding: 10px 15px;
+}
+/* Responsive customization of the "GitHub" text label for different browser sizes */
+.mobile-only #github {
+  padding: 0px;
+}
+.mobile-only .bookdemo {
+  border-radius: 5px;
+  height: auto;
+}
+.bookdemo:hover {
+  color: black !important;
+}
+#book-free-demo:hover {
+  background-color: #fff;
+  color: black !important;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+#book-free-demo,
+#download-now-button,
+.menu-title {
+  opacity: 1 !important;
+  transition-delay: 0s;
+  transition-duration: .3s;
+  transition-property: all;
+  transition: font-weight .1s ease-in-out;
+}
+#book-free-demo,
+#download-now-button {
+  padding: 8px 18px !important;
+  border-radius: 4px;
+}
+#book-free-demo {
+  text-align: center;
+  color: white !important;
+  border: 1px solid #fff !important;
+  background-color: transparent;
+  text-decoration: none;
+  letter-spacing: .5px;
+  vertical-align: top;
+}
+#download-now-button {
+  font-weight: 600;
+  background: #0073dc !important;
+  border-color: #4a90e2;
+  outline: medium none !important;
+}
+.mobile-only #download-now-button {
+  text-align: center;
+}
+#tryfreebutton {
+  padding: 10 15px;
+}
+#demo {
+  margin: 0px 10px 0px 10px;
+  padding: 2px 20px 0px 20px;
+}
+.mobile-only #demo {
+  padding: 10px 0px 10px 0px;
+  margin: 0px 0px 0px 0px;
+}
+/* Grid layout for menu items */
+@media (min-width: 1017px) {
+  .e-template-menu.e-menu-wrapper ul.e-ul {
+    width: 850px;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, 185px);
+    gap: 10px;
+    padding: 10px;
+  }
+}
+#menu .e-menu-wrapper,
+#menu .e-menu-container {
+  background: #111;
+}
+/* Each menu item styled as a card */
+@media (min-width: 1024px) {
+  .e-template-menu.e-menu-wrapper ul.e-ul .e-menu-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 10px;
+    min-height: 95px;
+  }
+  
+}
+@media (min-width: 1023px) {
+  .e-menu-wrapper.e-popup.e-menu-popup,
+   .e-menu-container.e-popup.e-menu-popup {
+  margin-left: -5%;
+  top: 66px !important;
+  }
+}
+@media (min-width: 800px) and (max-width: 1024px) {
+  .e-menu-wrapper.e-popup.e-menu-popup {
+    margin-left: 5px !important;
+  }
+}
+@media (min-width: 500px) and (max-width: 555px) {
+  .popup-menu.mobile-only {
+    margin-right: -3px !important;
+  }
+}
+@media (min-width: 750px) and (max-width: 1024px) {
+  .popup-menu.mobile-only {
+    width: 98.92% !important;
+    margin-left: 0px !important;
+  }
+}
+.e-menu-wrapper ul .e-menu-item .e-caret {
+  top: 0px !important;
+  right: 0px !important;
+}
+.mobile-only .e-menu-wrapper ul .e-menu-item .e-caret {
+  top: 5px !important;
+}
+#menu .e-menu-wrapper .e-menu .e-menu-item .e-caret,
+#menu .e-menu-container .e-menu .e-menu-item .e-caret,
+#menumobile .e-menu-wrapper .e-menu .e-menu-item .e-caret,
+#menumobile .e-menu-container .e-menu .e-menu-item .e-caret {
+  color: white !important;
+}
+/* Badge */
+.e-template-menu.e-menu-wrapper ul .e-menu-item .e-badge {
+  background-color: #ffeb3b;
+  color: #000;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+.menu-item {
+  width: 100%;
+  text-decoration: none;
+}
+/* Title and description */
+.menusubitems {
+  font-weight: bold;
+  color: #000;
+  font-size: 16px;
+  line-height: 16px;
+}
+.description {
+  display: inline-block;
+  font-weight: 400;
+  margin-left: 32px;
+  line-height: 16px;
+  white-space: normal;
+  letter-spacing: 0.24px;
+  font-size: 12px;
+  color: #475569;
+}
+.icon-text-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.menusubitems .icon-spacing {
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: text-top;
+}
+.mobile-only .e-menu-wrapper ul .e-menu-item {
+  padding-left: 0px !important;
+}
+hr.separator-line-mobile {
+  opacity: 0.25;
+  margin-top:0px !important;
+  margin-bottom:0px !important;
+}
+/* Removed the hover color effect from the "Learning" menu text items for a cleaner appearance */
+.e-menu-wrapper .e-menu .e-menu-item.e-focused,
+.e-menu-container .e-menu .e-menu-item.e-focused,
+.e-menu-wrapper .e-menu .e-menu-item.e-selected,
+.e-menu-wrapper .e-menu .e-menu-item.e-active-item,
+.e-menu-container .e-menu .e-menu-item.e-selected,
+.e-menu-container .e-menu .e-menu-item.e-active-item {
+  background-color: transparent !important;
+}
+/* Hover effect for the entire menu item */
+.e-template-menu.e-menu-wrapper ul.e-ul .e-menu-item:hover {
+  background-color: #e6f4ff;
+  box-shadow: 0 4px 12px rgba(0, 120, 212, 0.2);
+  transition: all 0.3s ease;
+}
+/* Zoom-in effect for the icon */
+.e-template-menu.e-menu-wrapper ul.e-ul .e-menu-item:hover .icon-spacing span {
+  transform: scale(1.3);
+  transition: transform 0.3s ease;
+}
+/* Ensure icon has smooth transition */
+.icon-spacing span {
+  /* margin-top: -10px; */
+  color: #0057FF;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.menu-item-title {
+  color: #334155 !important;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.e-menu-wrapper .e-ul,
+.e-menu-container .e-ul {
+  min-width: 85px !important;
+}
+.desktop-only {
+  display: flex;
+}
+.mobile-only {
+  display: none;
+  margin-left: auto;
+}
+.hamburger {
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+}
+@media (max-width: 1024px) {
+  .desktop-only {
+    display: none;
+  }
+  .mobile-only {
+    display: block;
+  }
+}
+@media (min-width: 750px) {
+ .mobile-only.popup-menu {
+    width: 98.4%;
+  }
+}
+@media (max-width: 1024px) {
+  .mobile-only.popup-menu {
+    position: absolute;
+    width: 98.92%;
+  }
+      
+  .menusubitems {
+    margin-bottom: 0px;
+  }
+  .e-template-menu.e-menu-wrapper ul.e-ul .e-menu-item {
+    min-height: 60px;
+    line-height: 0px;
+    padding-top: 10px !important;
+  }
+ 
+  .hamburger {
+    width: 40px;
+    height: 40px;
+    background-color: #333;
+    border: 1px solid #333;
+    color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 4px;
+    /* Optional: for slightly rounded corners */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  .hamburger:hover {
+    background-color: #555;
+    transform: scale(1.05);
+    /* Slight zoom on hover */
+  }
+  .e-menu-wrapper.e-popup.e-menu-popup,
+  .e-menu-container.e-popup.e-menu-popup {
+    margin-left: 0;
+    width: 100%;
+  }
+  .e-menu-wrapper.e-popup.e-menu-popup {
+    left: 5px !important;
+  }
+}
+.react-ui-kit {
+  width: 30px;
+  height: 30px;
+  background: url(https://cdn.syncfusion.com/content/images/common/menu/images/product-icons-v7.svg) 0 0 !important;
+  background-repeat: no-repeat !important;
+  background-position-x: -112px !important;
+  background-position-y: -104px !important;
+}
+.mobile-only .e-menu-wrapper ul .e-menu-item.e-menu-caret-icon,
+.mobile-only .e-menu-container ul .e-menu-item.e-menu-caret-icon,
+.mobile-only .e-menu-wrapper,
+.mobile-only .e-menu-container,
+.e-appbar.e-dark {
+  background: #111;
+}
+#download-now-button:hover {
+  background-color: #66b2ff !important;
+  border-radius: 4px;
+  border-color: #66b2ff;
+  transition: background-color 0.3s ease;
+}
+.App {
+  min-width: 550px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+#overalContainer {
+  margin-top: 5px;
 }
