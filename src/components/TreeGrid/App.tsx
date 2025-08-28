@@ -4,7 +4,7 @@ import { useMemo, useRef, useState, useEffect } from 'react';
 import { parentsUntil, ValueType, FilterBarMode, CheckboxSelectionType, SelectionType, CommandModel, FailureEventArgs, ContextMenuClickEventArgs, getObject } from '@syncfusion/ej2-react-grids';
 import { TreeGridComponent, FilterType, LoadingIndicatorModel, AggregateTemplateContext, RowPosition, AggregatesDirective, AggregateDirective, AggregateColumnsDirective, AggregateColumnDirective, ColumnModel, FilterHierarchyMode, SelectionSettingsModel, ContextMenuItem, ToolbarItems, FilterSettingsModel, EditMode, TreeGridColumn, RowDD, Aggregate, Resize, Toolbar, ColumnChooser, CommandColumn, Edit, ContextMenu, ColumnMenu, VirtualScroll, Page, PdfExport, ExcelExport, Freeze, ColumnsDirective, ColumnDirective, Filter, Sort, Reorder, Inject, ITreeData } from '@syncfusion/ej2-react-treegrid';
 import { projectDetails } from './datasource';
-import { ButtonComponent, CheckBoxComponent, ChipListComponent, ChipsDirective, ChipDirective, ChangeEventArgs } from '@syncfusion/ej2-react-buttons';
+import { ButtonComponent, CheckBoxComponent, ChipListComponent, ChipsDirective, ChipDirective } from '@syncfusion/ej2-react-buttons';
 import { AppBarComponent, MenuComponent, SidebarComponent } from '@syncfusion/ej2-react-navigations';
 import { AutoComplete, FieldSettingsModel  } from '@syncfusion/ej2-react-dropdowns';
 import { isNullOrUndefined, DateFormatOptions, createElement, closest } from '@syncfusion/ej2-base';
@@ -43,7 +43,7 @@ export const App = () => {
   let selectionType: string = "Multiple";
   let selectNewRowPosition: string = "Top";
   let selectEditMode: string = "Row";
-  const dateRules: object = { date: ['M/d/yyyy', 'Please enter a valid date'], required: true };
+  const dateRules: object = { date: ['M/d/yyyy', 'Please enter a valid date']};
   let dateParams : any = { params: { format: 'M/d/yyyy' } };
   let showEditLabel: boolean = false;
   const durationIDRules: object = { required: true, number: true };
@@ -84,10 +84,6 @@ export const App = () => {
   let menuObj: MenuComponent;
   const taskIDRules = { required: true };
   const taskNameRules = { required: true };
-  let dateFormat = {
-    format: "dd/MM/yyyy",
-    type: "date"
-  };
   const costRules = { required: true, number: true };
   let menuRef!: MenuComponent;
   let menuMobileRef!: MenuComponent;
@@ -434,7 +430,6 @@ export const App = () => {
     filterBarTypeOptions: [
       { value: "CheckBox", text: "CheckBox" },
       { value: "Excel", text: "Excel" },
-      { value: "Menu", text: "Menu" },
       { value: "FilterBar", text: "FilterBar" }
     ],
     filterHierarchyOptions: [
@@ -932,19 +927,6 @@ export const App = () => {
       startWalkthrough();
     },
 
-    onDataBound: () => {
-      if (treegridInst) {
-        if (treegridInst.filterSettings.type === "FilterBar") {
-          document.querySelectorAll('.e-filterbar th[e-mappinguid="grid-column10005"], .e-filterbar th[e-mappinguid="grid-column10004"], .e-filterbar th[e-mappinguid="grid-column10012"], .e-filterbar th[e-mappinguid="grid-column10008"], .e-filterbar th[e-mappinguid="grid-column10007"]').forEach(cell => {    
-            var val: any = (cell as any).querySelector('div.e-fltrinputdiv');
-            if (!isNullOrUndefined(val)) {
-              val.style.display = "none";
-            }
-          }); 
-        }
-      }
-    },
-
     exportComplete:(args : any) => {
         treegridInst.showColumns(['Priority']);
     },
@@ -1007,7 +989,7 @@ export const App = () => {
         textboxInstance.value = "";
         dialogInstance!.hide();
       } else if (args.target.textContent === "Search") {
-        if (selectedField && selectedOperator && selectedHierarchy && !isNullOrUndefined(searchText)) {
+        if (selectedField && selectedOperator && selectedHierarchy) {
           treegridInst.searchSettings = {
             fields: [selectedField],
             operator: selectedOperator,
@@ -1369,37 +1351,17 @@ export const App = () => {
       }
     },
 
-    singleColumnSettingsDateFormat: ((args: any) => {
+    singleColumnSettingsDateFormat : ((args: any) => {
       let columns = treegridInst.getColumns();
       for (let i = 0; i < columns.length; i++) {
         if (columns[i].field === 'EndDate') {
-          const aggregate = treegridInst.aggregates[0];
-          if (aggregate && aggregate.columns) {
-            const endDateAggregate = aggregate.columns.find(col => col.field === 'EndDate');
-            if (endDateAggregate) {
-              endDateAggregate.format = { format: args.event.currentTarget.innerText, type: 'date' };
-            }
-          }
           if (typeof treegridInst.getColumns()[i].format === 'string' || !treegridInst.getColumns()[i].format) {
             treegridInst.getColumns()[i].format = { format: '', type: 'date' };
-          }
+          }          
           (treegridInst.getColumns()[i].format as DateFormatOptions).format = args.event.currentTarget.innerText;
           (treegridInst.getColumns()[i].format as DateFormatOptions).type = 'date';
-          treegridInst.columns = columns;
+          treegridInst.refreshColumns();
         }
-      }
-    }),
-
-
-    singleColumnSettingsFreeze: ((args: any, data?: any) => {
-      if (treegridInst) {
-        let columns = treegridInst.getColumns();
-        columns.forEach((col) => {
-          if (col.field === "EndDate") {
-            col.freeze = data.properties.text;
-            treegridInst.columns = columns;
-          }
-        });
       }
     }),
 
@@ -1519,25 +1481,12 @@ export const App = () => {
         text: 'Column Date',
         iconCss: 'e-icons e-settings icon',
         items: [
-          {
-            text: 'Format',
-            items: [
               { text: 'yMMM', id:'yMMM', method: menuItemMethods.singleColumnSettingsDateFormat, checkbox: false },
               { text: 'dd/MM/yyyy', id: 'dd/MM/yyyy', method: menuItemMethods.singleColumnSettingsDateFormat, checkbox: true },
               { text: 'dd.MM.yyyy', id: 'dd.MM.yyyy', method: menuItemMethods.singleColumnSettingsDateFormat, checkbox: false },
               { text: 'dd/MM/yyyy hh:mm a', id: 'dd/MM/yyyy hh:mm a', method: menuItemMethods.singleColumnSettingsDateFormat, checkbox: false },
               { text: 'MM/dd/yyyy hh:mm:ss a', id: 'MM/dd/yyyy hh:mm:ss a', method: menuItemMethods.singleColumnSettingsDateFormat, checkbox: false },
             ]
-          },  {
-            text: 'Freeze',
-            items: [
-              { text: 'Left', id: 'Freeze Left', method: menuItemMethods.singleColumnSettingsFreeze, checkbox: true },
-              { text: 'Right', id: 'Freeze Right', method: menuItemMethods.singleColumnSettingsFreeze, checkbox: false },
-              { text: 'Fixed', id: 'Freeze Fixed', method: menuItemMethods.singleColumnSettingsFreeze, checkbox: false },
-              { text: 'None', id: 'Freeze None', method: menuItemMethods.singleColumnSettingsFreeze, checkbox: false },
-            ]
-          }
-        ],
       },
     ],
   };
@@ -1561,7 +1510,6 @@ export const App = () => {
         items: [
           { id: 'selection', label: 'Allow Selection', defaultChecked: true },
           { id: 'textwrap', label: 'Allow Text Wrap', defaultChecked: false },
-          { id: 'paging', label: 'Allow Paging', defaultChecked: true },
           { id: 'showcolumnmenu', label: 'Show Column Menu', defaultChecked: false },
           { id: 'general_treegrid', type: 'Separator' }
         ]
@@ -2094,8 +2042,6 @@ export const App = () => {
         }        
         else if (selectedListItemRef.current === "Tree Grid Settings") {          
           treegridInst.allowTextWrap = prev.textwrap;
-          treegridInst.allowPaging = prev.paging;
-          treegridInst.enableVirtualization = !prev.paging;
           treegridInst.showColumnMenu = prev.showcolumnmenu;
           treegridInst.enableAltRow = prev.altrow;
           if (treegridInst.enableAltRow) {
@@ -2338,6 +2284,7 @@ export const App = () => {
         allowSorting: false,
         headerTemplate: treegridCommonTemplates.durationTemplate,
         validationRules: durationIDRules,
+        filterTemplate: treegridFilterTemplates.filterTemplate,
         editType: "numericedit",
         minWidth: 50,
         maxWidth: 200
@@ -2383,7 +2330,6 @@ export const App = () => {
         actionBegin={handleTreeGridEvent.actionBegin}
         toolbarClick={handleTreeGridEvent.toolbarClick}
         created={handleTreeGridEvent.onTreeGridCreated}
-        dataBound={handleTreeGridEvent.onDataBound}
         excelExportComplete={handleTreeGridEvent.exportComplete}
       >
         <ColumnsDirective>
@@ -2391,12 +2337,12 @@ export const App = () => {
           <ColumnDirective field="TaskID" headerTextAlign='Center' validationRules={taskIDRules} disableHtmlEncode={false} isPrimaryKey={true} minWidth={135} width={145} maxWidth={165} filterBarTemplate={treegridFilterTemplates.taskIDFilter} headerText="Task ID" template={customComponentTemplates.taskTemplate} />
           <ColumnDirective field="TaskName" headerTextAlign="Center" validationRules={taskNameRules} allowFiltering={true} filterBarTemplate={treegridFilterTemplates.taskNameFilter} allowSorting={false} showColumnMenu={false} headerTemplate={treegridCommonTemplates.taskNameSettings} width={200} minWidth={190} maxWidth={220} />
           <ColumnDirective headerText='Project Details' textAlign='Center' headerTextAlign="Center" columns={treegridProperties.projectColumns} />
-          <ColumnDirective field="Progress" validationRules={costRules} allowSorting={false} headerTextAlign="Center" showColumnMenu={false} headerTemplate={treegridCommonTemplates.progressSettings} headerText="Progress (%)" template={treegridCommonTemplates.progressTemplate} width={170} minWidth={160} maxWidth={200} />
-          <ColumnDirective field="Priority" headerTextAlign="Center" minWidth={120} maxWidth={270} width={190} textAlign="Center" editType='dropdownedit' template={treegridCommonTemplates.priorityTemplate} />
+          <ColumnDirective field="Progress" validationRules={costRules} allowSorting={false} headerTextAlign="Center" showColumnMenu={false} headerTemplate={treegridCommonTemplates.progressSettings} headerText="Progress (%)" template={treegridCommonTemplates.progressTemplate} width={170} minWidth={160} maxWidth={200} filterTemplate={treegridFilterTemplates.filterTemplate} />
+          <ColumnDirective field="Priority" headerTextAlign="Center" minWidth={120} maxWidth={270} width={190} textAlign="Center" filterTemplate={treegridFilterTemplates.filterTemplate} editType='dropdownedit' template={treegridCommonTemplates.priorityTemplate} />
           <ColumnDirective field="EstimatedCost" validationRules={costRules} format="C0" allowSorting={false} type='number' textAlign='Right' headerTextAlign="Center" showColumnMenu={false} headerTemplate={treegridCommonTemplates.estimatedCostSettings} width={150} minWidth={60} maxWidth={250} filterBarTemplate={treegridFilterTemplates.templateOptionsCostTextBox} />
           <ColumnDirective field="ActualCost" validationRules={costRules} allowSorting={false} format="C0" type='number' textAlign='Right' headerTextAlign="Center" showColumnMenu={false} headerTemplate={treegridCommonTemplates.actualCostSettings} width={150} minWidth={60} maxWidth={250} filterBarTemplate={treegridFilterTemplates.templateOptionsCostTextBox} />
           <ColumnDirective field="CostDifference" validationRules={costRules} headerTextAlign="Center" headerText='Cost Comparison' width={180} minWidth={155} maxWidth={250} template={treegridCommonTemplates.costComparisonTemplate}></ColumnDirective>
-          <ColumnDirective headerText='Command' freeze="Right" headerTextAlign="Center" textAlign='Center' width={120} minWidth={110} maxWidth={250} commands={treegridProperties.commands} />
+          <ColumnDirective headerText='Command' filterTemplate={treegridFilterTemplates.filterTemplate} freeze="Right" headerTextAlign="Center" textAlign='Center' width={120} minWidth={110} maxWidth={250} commands={treegridProperties.commands} />
         </ColumnsDirective>
         <AggregatesDirective>
           <AggregateDirective showChildSummary={false}>
